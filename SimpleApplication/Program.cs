@@ -1,3 +1,5 @@
+using CoordinateSystem;
+
 namespace SimpleApplication;
 
 internal static class Program

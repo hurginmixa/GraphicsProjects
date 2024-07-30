@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleApplication", "SimpleApplication\SimpleApplication.csproj", "{B05A8243-3696-455F-939D-6EECFEA8313B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleApplication", "SimpleApplication\SimpleApplication.csproj", "{B05A8243-3696-455F-939D-6EECFEA8313B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoordinateSystem", "CoordinateSystem\CoordinateSystem.csproj", "{2FF2629C-F761-46CD-82A5-B8A8FB1067A3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoordinateSystem.Tests", "CoordinateSystem.Tests\CoordinateSystem.Tests.csproj", "{742BCB9B-CF7F-4206-9F03-B813FE487C11}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{B05A8243-3696-455F-939D-6EECFEA8313B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B05A8243-3696-455F-939D-6EECFEA8313B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B05A8243-3696-455F-939D-6EECFEA8313B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FF2629C-F761-46CD-82A5-B8A8FB1067A3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FF2629C-F761-46CD-82A5-B8A8FB1067A3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FF2629C-F761-46CD-82A5-B8A8FB1067A3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FF2629C-F761-46CD-82A5-B8A8FB1067A3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{742BCB9B-CF7F-4206-9F03-B813FE487C11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{742BCB9B-CF7F-4206-9F03-B813FE487C11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{742BCB9B-CF7F-4206-9F03-B813FE487C11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{742BCB9B-CF7F-4206-9F03-B813FE487C11}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

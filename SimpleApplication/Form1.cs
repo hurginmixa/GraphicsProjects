@@ -1,4 +1,5 @@
-﻿using Timer = System.Windows.Forms.Timer;
+﻿using CoordinateSystem;
+using Timer = System.Windows.Forms.Timer;
 
 namespace SimpleApplication;
 
@@ -6,10 +7,8 @@ public partial class Form1 : Form
 {
     private readonly DoubleBufferedPanel _drawingPanel;
     private readonly Timer _animationTimer;
-    private int _circleX;
-    private int _circleY;
-    private int _deltaX = 2;
-    private int _deltaY = 2;
+    private Point<DisplayCoordSystem> _circle = new(50, 50);
+    private Shift<DisplayCoordSystem> _delta = new(2, 2);
 
     public Form1()
     {
@@ -29,8 +28,13 @@ public partial class Form1 : Form
         _animationTimer.Tick += AnimationTimer_Tick;
         _animationTimer.Start();
 
-        _circleX = 50;
-        _circleY = 50;
+
+        Transform<GraphicCoordSystem, DisplayCoordSystem> transform =
+            new Transform<GraphicCoordSystem, DisplayCoordSystem>();
+
+        Shift<DisplayCoordSystem> shift = transform * new Shift<GraphicCoordSystem>(12, 45);
+
+        Point<GraphicCoordSystem> point = transform % (Point<DisplayCoordSystem>.Origin + shift);
     }
 
     private void DrawingPanel_Paint(object sender, PaintEventArgs e)
@@ -42,24 +46,23 @@ public partial class Form1 : Form
         g.DrawLine(pen, 10, 10, 200, 200);
 
         // Рисуем круг
-        g.FillEllipse(Brushes.Red, _circleX, _circleY, 50, 50);
+        g.FillEllipse(Brushes.Red, (int) _circle.X, (int) _circle.Y, 50, 50);
     }
 
     private void AnimationTimer_Tick(object sender, EventArgs e)
     {
         // Изменяем координаты круга
-        _circleX += _deltaX;
-        _circleY += _deltaY;
+        _circle += _delta;
 
         // Проверяем границы панели
-        if (_circleX < 0 || _circleX + 50 > _drawingPanel.Width)
+        if (_circle.X < 0 || _circle.X + 50 > _drawingPanel.Width)
         {
-            _deltaX = -_deltaX;
+            _delta = _delta.FlipX();
         }
 
-        if (_circleY < 0 || _circleY + 50 > _drawingPanel.Height)
+        if (_circle.Y < 0 || _circle.Y + 50 > _drawingPanel.Height)
         {
-            _deltaY = -_deltaY;
+            _delta = _delta.FlipY();
         }
 
         // Перерисовываем панель
