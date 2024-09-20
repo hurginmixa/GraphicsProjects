@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CoordinateSystem\CoordinateSystem.csproj" />
+    <ProjectReference Include="..\MixaSystem\MixaSystem.csproj" />
   </ItemGroup>
 
   <ItemGroup>

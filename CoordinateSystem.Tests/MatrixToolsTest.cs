@@ -3,6 +3,7 @@ using NUnit.Framework.Internal;
 namespace CoordinateSystem.Tests;
 
 using static Math;
+using static MatrixTools;
 
 [TestFixture]
 public class MatrixToolsTest
@@ -21,18 +22,32 @@ public class MatrixToolsTest
     [Test]
     public void Test1()
     {
-        double[,] GetMatrix(double algRad) => new[,] {{Cos(algRad), -Sin(algRad), 0.0}, {Sin(algRad), Cos(algRad), 0.0}, {0.0, 0.0, 1.0}};
-
         Assert.Multiple(() =>
         {
-            var m = GetMatrix(PI / 2);
             var v = new[,] {{3.0}, {4.0}, {1.0}};
-            var r = MatrixTools.MultiplyMatrices(m, v);
-            Assert.That(r, Is.EqualTo(new[,] {{-4}, {3}, {1}}).Within(0.0001));
 
-            m = GetMatrix(-PI / 2);
-            r = MatrixTools.MultiplyMatrices(m, v);
-            Assert.That(r, Is.EqualTo(new[,] {{4}, {-3}, {1}}).Within(0.0001));
+            {
+                var m = MakeAngleMatrix(PI / 2);
+                var r = MultiplyMatrices(m, v);
+                Assert.That(r, Is.EqualTo(new[,] {{-4}, {3}, {1}}).Within(0.0001));
+            }
+
+            {
+                var m = MakeAngleMatrix(-PI / 2);
+                var r = MultiplyMatrices(m, v);
+                Assert.That(r, Is.EqualTo(new[,] {{4}, {-3}, {1}}).Within(0.0001));
+            }
+
+            {
+                var m1 = MakeAngleMatrix(-PI / 4);
+
+                var m = MakeAngleMatrix(0);
+                m = MultiplyMatrices(m1, m);
+                m = MultiplyMatrices(m1, m);
+
+                var r = MultiplyMatrices(m, v);
+                Assert.That(r, Is.EqualTo(new[,] {{4}, {-3}, {1}}).Within(0.0001));
+            }
         });
     }
 }

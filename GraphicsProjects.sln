@@ -7,7 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleApplication", "Simple
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoordinateSystem", "CoordinateSystem\CoordinateSystem.csproj", "{2FF2629C-F761-46CD-82A5-B8A8FB1067A3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoordinateSystem.Tests", "CoordinateSystem.Tests\CoordinateSystem.Tests.csproj", "{742BCB9B-CF7F-4206-9F03-B813FE487C11}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CoordinateSystem.Tests", "CoordinateSystem.Tests\CoordinateSystem.Tests.csproj", "{742BCB9B-CF7F-4206-9F03-B813FE487C11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MixaSystem", "MixaSystem\MixaSystem.csproj", "{9E3CF212-6705-4849-8FD8-7142F5FEB980}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{742BCB9B-CF7F-4206-9F03-B813FE487C11}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{742BCB9B-CF7F-4206-9F03-B813FE487C11}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{742BCB9B-CF7F-4206-9F03-B813FE487C11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9E3CF212-6705-4849-8FD8-7142F5FEB980}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9E3CF212-6705-4849-8FD8-7142F5FEB980}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9E3CF212-6705-4849-8FD8-7142F5FEB980}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9E3CF212-6705-4849-8FD8-7142F5FEB980}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

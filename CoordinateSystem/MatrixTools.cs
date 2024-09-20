@@ -1,4 +1,6 @@
-﻿namespace CoordinateSystem
+﻿using static System.Math;
+
+namespace CoordinateSystem
 {
     public static class MatrixTools
     {
@@ -11,24 +13,25 @@
 
             if (aCols != bRows)
             {
-                throw new InvalidOperationException(
-                    "Number of columns in the first matrix must be equal to the number of rows in the second matrix.");
+                throw new InvalidOperationException("Number of columns in the first matrix must be equal to the number of rows in the second matrix.");
             }
 
             double[,] result = new double[aRows, bCols];
 
-            for (int i = 0; i < aRows; i++)
+            for (int row = 0; row < aRows; row++)
             {
-                for (int j = 0; j < bCols; j++)
+                for (int col = 0; col < bCols; col++)
                 {
                     for (int k = 0; k < aCols; k++)
                     {
-                        result[i, j] += a[i, k] * b[k, j];
+                        result[row, col] += a[row, k] * b[k, col];
                     }
                 }
             }
 
             return result;
         }
+
+        public static double[,] MakeAngleMatrix(double algRad) => new[,] {{Cos(algRad), -Sin(algRad), 0.0}, {Sin(algRad), Cos(algRad), 0.0}, {0.0, 0.0, 1.0}};
     }
 }
