@@ -20,56 +20,56 @@ internal class TransformTest
     [Test]
     public void RotateTest()
     {
-        Transform<GraphicCoordSystem, DisplayCoordSystem> transform = new Transform<GraphicCoordSystem, DisplayCoordSystem>();
+        Transform<GraphicSystem, DisplaySystem> transform = new Transform<GraphicSystem, DisplaySystem>();
 
-        Point<GraphicCoordSystem> point = new Point<GraphicCoordSystem>(3, 4);
+        Point<GraphicSystem> point = new Point<GraphicSystem>(3, 4);
 
-        Point<DisplayCoordSystem> r = transform * point;
-        Assert.That(r, Is.EqualTo(new Point<DisplayCoordSystem>(3, 4)));
+        Point<DisplaySystem> r = transform * point;
+        Assert.That(r, Is.EqualTo(new Point<DisplaySystem>(3, 4)));
 
         transform.AddRotate(PI / 2);
         r = transform * point;
-        Assert.That(r, Is.EqualTo(new Point<DisplayCoordSystem>(-4, 3)));
+        Assert.That(r, Is.EqualTo(new Point<DisplaySystem>(-4, 3)));
 
         transform.AddRotate(-PI / 2);
         r = transform * point;
-        Assert.That(r, Is.EqualTo(new Point<DisplayCoordSystem>(3, 4)));
+        Assert.That(r, Is.EqualTo(new Point<DisplaySystem>(3, 4)));
 
         transform.AddRotate(-PI / 2);
         r = transform * point;
-        Assert.That(r, Is.EqualTo(new Point<DisplayCoordSystem>(4, -3)));
+        Assert.That(r, Is.EqualTo(new Point<DisplaySystem>(4, -3)));
     }
 
     [Test]
     public void FlipsTest()
     {
-        Transform<GraphicCoordSystem, DisplayCoordSystem> transform = new Transform<GraphicCoordSystem, DisplayCoordSystem>();
+        Transform<GraphicSystem, DisplaySystem> transform = new Transform<GraphicSystem, DisplaySystem>();
 
-        Point<GraphicCoordSystem> point = new Point<GraphicCoordSystem>(3, 4);
+        Point<GraphicSystem> point = new Point<GraphicSystem>(3, 4);
 
         transform.AddFlipX();
-        Point<DisplayCoordSystem> r = transform * point;
-        Assert.That(r, Is.EqualTo(new Point<DisplayCoordSystem>(-3, 4)));
+        Point<DisplaySystem> r = transform * point;
+        Assert.That(r, Is.EqualTo(new Point<DisplaySystem>(-3, 4)));
 
         transform.AddFlipX();
         r = transform * point;
-        Assert.That(r, Is.EqualTo(new Point<DisplayCoordSystem>(3, 4)));
+        Assert.That(r, Is.EqualTo(new Point<DisplaySystem>(3, 4)));
 
         transform.AddFlipY();
         r = transform * point;
-        Assert.That(r, Is.EqualTo(new Point<DisplayCoordSystem>(3, -4)));
+        Assert.That(r, Is.EqualTo(new Point<DisplaySystem>(3, -4)));
 
         transform.AddFlipY();
         r = transform * point;
-        Assert.That(r, Is.EqualTo(new Point<DisplayCoordSystem>(3, 4)));
+        Assert.That(r, Is.EqualTo(new Point<DisplaySystem>(3, 4)));
 
         transform.AddFlipY();
         transform.AddFlipX();
         r = transform * point;
-        Assert.That(r, Is.EqualTo(new Point<DisplayCoordSystem>(-3, -4)));
+        Assert.That(r, Is.EqualTo(new Point<DisplaySystem>(-3, -4)));
 
         transform.AddRotate(PI);
         r = transform * point;
-        Assert.That(r, Is.EqualTo(new Point<DisplayCoordSystem>(3, 4)));
+        Assert.That(r, Is.EqualTo(new Point<DisplaySystem>(3, 4)));
     }
 }

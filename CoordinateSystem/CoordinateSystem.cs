@@ -4,6 +4,6 @@ namespace CoordinateSystem;
 
 public abstract class CoordinateSystem {}
 
-public abstract class GraphicCoordSystem : CoordinateSystem {}
+public abstract class GraphicSystem : CoordinateSystem {}
     
-public abstract class DisplayCoordSystem : CoordinateSystem {}
+public abstract class DisplaySystem : CoordinateSystem {}

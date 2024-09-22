@@ -11,7 +11,7 @@ public struct Point<TCoordinateSystem>(double x, double y) : IEquatable<Point<TC
 
     public static Point<TCoordinateSystem> Origin => new Point<TCoordinateSystem>(0, 0);
 
-    public override string ToString() => $"X:{X}, X:{Y}";
+    public override string ToString() => $"X:{X}, Y:{Y}";
 
     public bool Equals(Point<TCoordinateSystem> other)
     {

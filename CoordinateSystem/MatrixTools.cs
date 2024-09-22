@@ -2,10 +2,18 @@
 
 namespace CoordinateSystem
 {
+    public class MatrixArray(double[,] matrix)
+    {
+        public readonly double[,] Matrix = matrix;
+    }
+
     public static class MatrixTools
     {
-        public static double[,] MultiplyMatrices(double[,] a, double[,] b)
+        public static MatrixArray MultiplyMatrices(MatrixArray ma, MatrixArray mb)
         {
+            double[,] a = ma.Matrix;
+            double[,] b = mb.Matrix;
+
             int aRows = a.GetLength(0);
             int aCols = a.GetLength(1);
             int bRows = b.GetLength(0);
@@ -29,9 +37,9 @@ namespace CoordinateSystem
                 }
             }
 
-            return result;
+            return new MatrixArray(result);
         }
 
-        public static double[,] MakeAngleMatrix(double algRad) => new[,] {{Cos(algRad), -Sin(algRad), 0.0}, {Sin(algRad), Cos(algRad), 0.0}, {0.0, 0.0, 1.0}};
+        public static MatrixArray MakeRotateMatrix(double algRad) => new MatrixArray(new[,] {{Cos(algRad), -Sin(algRad), 0.0}, {Sin(algRad), Cos(algRad), 0.0}, {0.0, 0.0, 1.0}});
     }
 }

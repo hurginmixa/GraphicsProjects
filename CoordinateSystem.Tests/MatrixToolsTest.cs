@@ -24,29 +24,29 @@ public class MatrixToolsTest
     {
         Assert.Multiple(() =>
         {
-            var v = new[,] {{3.0}, {4.0}, {1.0}};
+            var v = new MatrixArray(new[,] {{3.0}, {4.0}, {1.0}});
 
             {
-                var m = MakeAngleMatrix(PI / 2);
-                var r = MultiplyMatrices(m, v);
-                Assert.That(r, Is.EqualTo(new[,] {{-4}, {3}, {1}}).Within(0.0001));
+                MatrixArray m = MakeRotateMatrix(PI / 2);
+                MatrixArray r = MultiplyMatrices(m, v);
+                Assert.That(r.Matrix, Is.EqualTo(new[,] {{-4}, {3}, {1}}).Within(0.0001));
             }
 
             {
-                var m = MakeAngleMatrix(-PI / 2);
-                var r = MultiplyMatrices(m, v);
-                Assert.That(r, Is.EqualTo(new[,] {{4}, {-3}, {1}}).Within(0.0001));
+                MatrixArray m = MakeRotateMatrix(-PI / 2);
+                MatrixArray r = MultiplyMatrices(m, v);
+                Assert.That(r.Matrix, Is.EqualTo(new[,] {{4}, {-3}, {1}}).Within(0.0001));
             }
 
             {
-                var m1 = MakeAngleMatrix(-PI / 4);
+                var m1 = MakeRotateMatrix(-PI / 4);
 
-                var m = MakeAngleMatrix(0);
+                MatrixArray m = MakeRotateMatrix(0);
                 m = MultiplyMatrices(m1, m);
                 m = MultiplyMatrices(m1, m);
 
-                var r = MultiplyMatrices(m, v);
-                Assert.That(r, Is.EqualTo(new[,] {{4}, {-3}, {1}}).Within(0.0001));
+                MatrixArray r = MultiplyMatrices(m, v);
+                Assert.That(r.Matrix, Is.EqualTo(new[,] {{4}, {-3}, {1}}).Within(0.0001));
             }
         });
     }

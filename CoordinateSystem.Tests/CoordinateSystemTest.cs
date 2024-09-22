@@ -6,24 +6,24 @@ internal class CoordinateSystemTest
     [Test]
     public void Test1()
     {
-        Point<DisplayCoordSystem> point = new Point<DisplayCoordSystem>(12, 4) + new Shift<DisplayCoordSystem>(5, 7);
+        Point<DisplaySystem> point = new Point<DisplaySystem>(12, 4) + new Shift<DisplaySystem>(5, 7);
 
-        Assert.That(point, Is.EqualTo(new Point<DisplayCoordSystem>(17, 11)));
+        Assert.That(point, Is.EqualTo(new Point<DisplaySystem>(17, 11)));
     }
 
     [Test]
     public void Test2()
     {
-        Shift<DisplayCoordSystem> shift = new Point<DisplayCoordSystem>(12, 4) - new Point<DisplayCoordSystem>(5, 7);
+        Shift<DisplaySystem> shift = new Point<DisplaySystem>(12, 4) - new Point<DisplaySystem>(5, 7);
 
-        Assert.That(shift, Is.EqualTo(new Shift<DisplayCoordSystem>(7, -3)));
+        Assert.That(shift, Is.EqualTo(new Shift<DisplaySystem>(7, -3)));
     }
 
     [Test]
     public void Test3()
     {
-        Point<DisplayCoordSystem> point = new Point<DisplayCoordSystem>(12, 4) - new Shift<DisplayCoordSystem>(5, 7);
+        Point<DisplaySystem> point = new Point<DisplaySystem>(12, 4) - new Shift<DisplaySystem>(5, 7);
 
-        Assert.That(point, Is.EqualTo(new Point<DisplayCoordSystem>(7, -3)));
+        Assert.That(point, Is.EqualTo(new Point<DisplaySystem>(7, -3)));
     }
 }
