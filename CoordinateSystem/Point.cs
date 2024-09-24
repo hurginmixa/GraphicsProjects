@@ -2,7 +2,7 @@
 
 namespace CoordinateSystem;
 
-public struct Point<TCoordinateSystem>(double x, double y) : IEquatable<Point<TCoordinateSystem>> where TCoordinateSystem : CoordinateSystem
+public readonly struct Point<TCoordinateSystem>(double x, double y) : IEquatable<Point<TCoordinateSystem>> where TCoordinateSystem : CoordinateSystem
 {
     public readonly double X = x, Y = y;
     public readonly bool IsInitialized = true;

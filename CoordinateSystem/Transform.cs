@@ -59,6 +59,14 @@ public class Transform<TSrcCoordSystem, TDestCoordSystem>
         return new Point<TDestCoordSystem>(resultMatrux.Matrix[0, 0], resultMatrux.Matrix[1, 0]);
     }
 
+    public static Stroke<TDestCoordSystem> operator *(Transform<TSrcCoordSystem, TDestCoordSystem> tr, Stroke<TSrcCoordSystem> stroke)
+    {
+        Point<TDestCoordSystem> p1 = tr * stroke.Point1;
+        Point<TDestCoordSystem> p2 = tr * stroke.Point2;
+
+        return new Stroke<TDestCoordSystem>(p1, p2);
+    }
+
     public static Shift<TDestCoordSystem> operator* (Transform<TSrcCoordSystem, TDestCoordSystem> tr, Shift<TSrcCoordSystem> shift)
     {
         var p1 = Point<TSrcCoordSystem>.Origin + shift;

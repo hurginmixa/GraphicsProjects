@@ -12,7 +12,7 @@ public partial class Form1 : Form
 {
     private readonly DoubleBufferedPanel _drawingPanel;
     private readonly Timer _animationTimer;
-    private readonly AstrixModel _astrixModel = new(160, 7);
+    private readonly StrokesModel _strokesModel = new();
 
     private Point<DisplaySystem> _circle = new(50, 50);
     private Shift<DisplaySystem> _delta = new(2, 2);
@@ -40,34 +40,15 @@ public partial class Form1 : Form
     {
         Graphics g = e.Graphics;
 
-        // Рисуем отрезок
-        Pen pen = new Pen(Color.Black, 2);
+        int panelCenterX = _drawingPanel.Width / 2;
+        int panelCenterY = _drawingPanel.Height / 2;
 
-        Point<DisplaySystem> p1 = new Point<DisplaySystem>(50, 50);
-        Point<DisplaySystem> p2 = new Point<DisplaySystem>(200, 200);
-        g.DrawLine(pen, (int)p1.X, (int)p1.Y, (int)p2.X, (int)p2.Y);
+        Pen pen = new Pen(Brushes.Gray);
+
+        int l = 116;
+        g.DrawEllipse(pen, (int) panelCenterX - l/2, (int) panelCenterY - l/2, l, l);
 
         DrawAstrix(g);
-
-        Transform<DisplaySystem, DisplaySystem> tr = new Transform<DisplaySystem, DisplaySystem>();
-        tr.AddShift(new Shift<DisplaySystem>(100, 0));
-        tr.AddStretch(1.5);
-        //tr.AddRotate(PI / 20);
-
-        pen = new Pen(Color.Magenta, 2);
-
-        for (int i = 0; i < 4; i++)
-        {
-            var p1new = tr * p1;
-            g.DrawLine(pen, (int)p1.X, (int)p1.Y, (int)p1new.X, (int)p1new.Y);
-            
-            var p2new = tr * p2;
-            g.DrawLine(pen, (int)p2.X, (int)p2.Y, (int)p2new.X, (int)p2new.Y);
-
-            p1 = p1new;
-            p2 = p2new;
-            g.DrawLine(pen, (int)p1.X, (int)p1.Y, (int)p2.X, (int)p2.Y);
-        }
 
         // Рисуем круг
         g.FillEllipse(Brushes.Red, (int) _circle.X, (int) _circle.Y, 50, 50);
@@ -76,36 +57,27 @@ public partial class Form1 : Form
     private void DrawAstrix(Graphics g)
     {
         Transform<GraphicSystem, DisplaySystem> tr = new Transform<GraphicSystem, DisplaySystem>();
-
-        int dispCenterX = _drawingPanel.Width / 2;
-        int dispCenterY = _drawingPanel.Height / 2;
         tr.AddRotate(PI);
-        tr.AddShift(new Shift<DisplaySystem>(dispCenterX, dispCenterY));
 
-        var dispCenter = tr * new Point<GraphicSystem>(0,0);
+        double minX = _strokesModel.Strokes.Select(s => tr *s).Min(p => Math.Min(p.Point1.X, p.Point2.X));
+        double minY = _strokesModel.Strokes.Select(s => tr *s).Min(p => Math.Min(p.Point1.Y, p.Point2.Y));
+        double maxX = _strokesModel.Strokes.Select(s => tr *s).Max(p => Math.Max(p.Point1.X, p.Point2.X));
+        double maxY = _strokesModel.Strokes.Select(s => tr *s).Max(p => Math.Max(p.Point1.Y, p.Point2.Y));
+        Point<GraphicSystem> strokesCenter = new Point<GraphicSystem>((minX + maxX) / 2, (minY + maxY) / 2);
+
+        int panelCenterX = _drawingPanel.Width / 2;
+        int panelCenterY = _drawingPanel.Height / 2;
+
+        tr.AddShift(new Shift<DisplaySystem>(panelCenterX - strokesCenter.X, panelCenterY - strokesCenter.Y));
 
         Pen pen = new Pen(Color.Blue, 2);
 
-        foreach (Point<GraphicSystem> point in _astrixModel.Points)
+        foreach (var stroke in _strokesModel.Strokes)
         {
-            Point<DisplaySystem> displayPoint = tr * point;
+            Stroke<DisplaySystem> displayStorke = tr * stroke;
 
-            g.DrawLine(pen, (int)dispCenter.X, (int)dispCenter.Y, (int)displayPoint.X, (int)displayPoint.Y);
+            g.DrawLine(pen, (int)displayStorke.Point1.X, (int)displayStorke.Point1.Y, (int)displayStorke.Point2.X, (int)displayStorke.Point2.Y);
         }
-
-        Point<DisplaySystem> pFirst = tr * _astrixModel.Points.First();
-        Point<DisplaySystem> pCurrent = pFirst;
-
-        foreach (Point<GraphicSystem> point in _astrixModel.Points.Skip(1))
-        {
-            Point<DisplaySystem> pNext = tr * point;
-
-            g.DrawLine(pen, (int)pCurrent.X, (int)pCurrent.Y, (int)pNext.X, (int)pNext.Y);
-
-            pCurrent = pNext;
-        }
-        
-        g.DrawLine(pen, (int)pCurrent.X, (int)pCurrent.Y, (int)pFirst.X, (int)pFirst.Y);
     }
 
     private void AnimationTimer_Tick(object sender, EventArgs e)
@@ -130,7 +102,7 @@ public partial class Form1 : Form
             _delta = transform * _delta;
         }
 
-        _astrixModel.AddTick();
+        _strokesModel.AddTick();
 
         // Перерисовываем панель
         _drawingPanel.Invalidate(); // Это вызывает событие Paint для перерисовки панели
