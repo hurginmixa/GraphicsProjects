@@ -1,4 +1,3 @@
-using CoordinateSystem.Primitives;
 using NUnit.Framework.Internal;
 
 namespace CoordinateSystem.Tests;
@@ -24,29 +23,29 @@ public class MatrixToolsTest
     {
         Assert.Multiple(() =>
         {
-            var v = new MatrixArray(new[,] {{3.0}, {4.0}, {1.0}});
+            var v = new Matrix(new[,] {{3.0}, {4.0}, {1.0}});
 
             {
-                MatrixArray m = MatrixArray.MakeRotateMatrixArray(PI / 2);
-                MatrixArray r = MatrixArray.Mul(m, v);
-                Assert.That(r.Matrix, Is.EqualTo(new[,] {{-4}, {3}, {1}}).Within(0.0001));
+                Matrix m = Matrix.MakeRotateMatrixArray(PI / 2);
+                Matrix r = Matrix.Mul(m, v);
+                Assert.That(r.MatrixCoefficients, Is.EqualTo(new[,] {{-4}, {3}, {1}}).Within(0.0001));
             }
 
             {
-                MatrixArray m = MatrixArray.MakeRotateMatrixArray(-PI / 2);
-                MatrixArray r = MatrixArray.Mul(m, v);
-                Assert.That(r.Matrix, Is.EqualTo(new[,] {{4}, {-3}, {1}}).Within(0.0001));
+                Matrix m = Matrix.MakeRotateMatrixArray(-PI / 2);
+                Matrix r = Matrix.Mul(m, v);
+                Assert.That(r.MatrixCoefficients, Is.EqualTo(new[,] {{4}, {-3}, {1}}).Within(0.0001));
             }
 
             {
-                var m1 = MatrixArray.MakeRotateMatrixArray(-PI / 4);
+                var m1 = Matrix.MakeRotateMatrixArray(-PI / 4);
 
-                MatrixArray m = MatrixArray.MakeRotateMatrixArray(0);
-                m = MatrixArray.Mul(m1, m);
-                m = MatrixArray.Mul(m1, m);
+                Matrix m = Matrix.MakeRotateMatrixArray(0);
+                m = Matrix.Mul(m1, m);
+                m = Matrix.Mul(m1, m);
 
-                MatrixArray r = MatrixArray.Mul(m, v);
-                Assert.That(r.Matrix, Is.EqualTo(new[,] {{4}, {-3}, {1}}).Within(0.0001));
+                Matrix r = Matrix.Mul(m, v);
+                Assert.That(r.MatrixCoefficients, Is.EqualTo(new[,] {{4}, {-3}, {1}}).Within(0.0001));
             }
         });
     }

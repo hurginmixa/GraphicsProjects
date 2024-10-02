@@ -1,20 +1,19 @@
 ﻿using CoordinateSystem;
-
 using static System.Math;
 
-namespace SimpleApplication.Models
+namespace SimpleApplication.Models.AstrixModels
 {
-    internal class AstrixModel
+    internal class AstrixPointsModel
     {
         private readonly Point<GraphicSystem> _center;
         private readonly List<Point<GraphicSystem>> _points = new();
 
-        public AstrixModel(Point<GraphicSystem> center, int length, int count)
+        public AstrixPointsModel(Point<GraphicSystem> center, int length, int count)
         {
             _center = center;
 
             Transform<GraphicSystem, GraphicSystem> tr = new Transform<GraphicSystem, GraphicSystem>();
-            tr.AddShift(Point<GraphicSystem>.Origin -_center);
+            tr.AddShift(Point<GraphicSystem>.Origin - _center);
             tr.AddRotate(PI * 2 / count);
             tr.AddShift(_center - Point<GraphicSystem>.Origin);
 

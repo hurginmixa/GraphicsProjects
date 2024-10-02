@@ -1,4 +1,6 @@
 using CoordinateSystem;
+using SimpleApplication.Models;
+using SimpleApplication.Models.AstrixModels;
 
 namespace SimpleApplication;
 
@@ -13,6 +15,10 @@ internal static class Program
         // To customize application configuration such as set high DPI settings or default font,
         // see https://aka.ms/applicationconfiguration.
         ApplicationConfiguration.Initialize();
-        Application.Run(new Form1());
+        
+        IStrokesModel strokesModel = new AstrixStrokesModel();
+        strokesModel = new RectanglesModel();
+        
+        Application.Run(new Form1(strokesModel));
     }
 }
