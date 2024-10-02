@@ -4,15 +4,15 @@ namespace SimpleApplication.Models
 {
     internal class StrokesModel
     {
-        private readonly AstrixModel _astrixModel = new(new Point<GraphicSystem>(100, 150), 280, 130);
+        private readonly AstrixModel _astrixModel = new(new Point<GraphicSystem>(100, 150), 280, 3);
         private readonly Shift<GraphicSystem> _panelSize = new(200, 300);
 
-        public void AddTick()
+        public void TickProcess()
         {
-            _astrixModel.AddTick();
+            _astrixModel.TickProcess();
         }
 
-        public IEnumerable<Stroke<GraphicSystem>> Strokes 
+        public IEnumerable<Stroke<GraphicSystem>> Strokes
         {
             get
             {

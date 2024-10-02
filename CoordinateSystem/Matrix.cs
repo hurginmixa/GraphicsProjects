@@ -1,33 +1,51 @@
 ﻿namespace CoordinateSystem;
 
-// AA AB DA
-// BA BB DB
-public class Matrix(double aa, double ab, double ba, double bb, double da, double db)
+public class Matrix
 {
-    private readonly double _aa = aa;
-    private readonly double _ab = ab;
-    private readonly double _ba = ba;
-    private readonly double _bb = bb;
-    private readonly double _da = da;
-    private readonly double _db = db;
+    public readonly double[,] MatrixCoefficients;
 
-    public Matrix(MatrixArray v) : this(aa: v.Matrix[0, 0], ab: v.Matrix[0, 1], ba: v.Matrix[1, 0], bb: v.Matrix[1, 1], da: v.Matrix[0, 2], db: v.Matrix[1, 2]) { }
-
-    public MatrixArray ToMatrixArray() => new(new[,] {{_aa, _ab, _da}, {_ba, _bb, _db}, {0, 0, 1}});
-
-    public static Matrix GetFromAngle(double algRad) => new(MatrixTools.MakeRotateMatrix(algRad));
-
-    public static Matrix Mul(Matrix m1, Matrix m2)
+    public Matrix(double[,] matrixCoefficients)
     {
-        MatrixArray result = MatrixTools.MultiplyMatrices(m1.ToMatrixArray(), m2.ToMatrixArray());
-        
+        MatrixCoefficients = matrixCoefficients;
+    }
+
+    // AA AB DA
+    // BA BB DB
+    public Matrix(double aa, double ab, double ba, double bb, double da, double db)
+    {
+        MatrixCoefficients = new[,] { { aa, ab, da }, { ba, bb, db }, { 0, 0, 1 } };
+    }
+
+    public static Matrix Mul(Matrix ma, Matrix mb)
+    {
+        double[,] a = ma.MatrixCoefficients;
+        double[,] b = mb.MatrixCoefficients;
+
+        int aRows = a.GetLength(0);
+        int aCols = a.GetLength(1);
+        int bRows = b.GetLength(0);
+        int bCols = b.GetLength(1);
+
+        if (aCols != bRows)
+        {
+            throw new InvalidOperationException("Number of columns in the first matrix must be equal to the number of rows in the second matrix.");
+        }
+
+        double[,] result = new double[aRows, bCols];
+
+        for (int row = 0; row < aRows; row++)
+        {
+            for (int col = 0; col < bCols; col++)
+            {
+                for (int k = 0; k < aCols; k++)
+                {
+                    result[row, col] += a[row, k] * b[k, col];
+                }
+            }
+        }
+
         return new Matrix(result);
     }
 
-    public static Vector Mul(Matrix m, Vector m2)
-    {
-        MatrixArray v = MatrixTools.MultiplyMatrices(m.ToMatrixArray(), m2.ToMatrixArray());
-
-        return new Vector(v);
-    }
+    public static Matrix MakeRotateMatrixArray(double algRad) => new Matrix(new[,] { { Math.Cos(algRad), -Math.Sin(algRad), 0.0 }, { Math.Sin(algRad), Math.Cos(algRad), 0.0 }, { 0.0, 0.0, 1.0 } });
 }

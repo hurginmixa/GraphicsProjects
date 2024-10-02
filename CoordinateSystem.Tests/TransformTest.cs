@@ -22,7 +22,8 @@ internal class TransformTest
     {
         Transform<GraphicSystem, DisplaySystem> transform = new Transform<GraphicSystem, DisplaySystem>();
 
-        Point<GraphicSystem> point = new Point<GraphicSystem>(3, 4);
+        Point<GraphicSystem> point = new (3, 4);
+        Point<GraphicSystem> point1 = new ();
 
         Point<DisplaySystem> r = transform * point;
         Assert.That(r, Is.EqualTo(new Point<DisplaySystem>(3, 4)));

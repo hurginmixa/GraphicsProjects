@@ -102,7 +102,7 @@ public partial class Form1 : Form
             _delta = transform * _delta;
         }
 
-        _strokesModel.AddTick();
+        _strokesModel.TickProcess();
 
         // Перерисовываем панель
         _drawingPanel.Invalidate(); // Это вызывает событие Paint для перерисовки панели

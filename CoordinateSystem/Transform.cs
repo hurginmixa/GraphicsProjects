@@ -3,60 +3,56 @@ using System.Runtime.CompilerServices;
 
 namespace CoordinateSystem;
 
-using static MatrixTools;
-
 public class Transform<TSrcCoordSystem, TDestCoordSystem>
     where TSrcCoordSystem : CoordinateSystem
     where TDestCoordSystem : CoordinateSystem
 {
-    private Matrix _matrix = new(MakeRotateMatrix(0));
+    private Matrix _matrix = Matrix.MakeRotateMatrixArray(0);
 
     public void AddRotate(double angle)
     {
-        _matrix = new Matrix(MultiplyMatrices(MakeRotateMatrix(angle), _matrix.ToMatrixArray()));
+        _matrix = Matrix.Mul(Matrix.MakeRotateMatrixArray(angle), _matrix);
     }
 
     public void AddFlipX()
     {
         Matrix m = new Matrix(aa: -1, ab: 0, ba: 0, bb: 1, da: 0, db: 0);
 
-        _matrix = new Matrix(MultiplyMatrices(m.ToMatrixArray(), _matrix.ToMatrixArray()));
+        _matrix = Matrix.Mul(m, _matrix);
     }
 
     public void AddFlipY()
     {
         Matrix m = new Matrix(aa: 1, ab: 0, ba: 0, bb: -1, da: 0, db: 0);
 
-        _matrix = new Matrix(MultiplyMatrices(m.ToMatrixArray(), _matrix.ToMatrixArray()));
+        _matrix = Matrix.Mul(m, _matrix);
     }
 
     public void AddShift(Shift<TDestCoordSystem> shift)
     {
         var g = new Matrix(1, 0, 0, 1, shift.DX, shift.DY);
 
-        _matrix = new Matrix(MultiplyMatrices(g.ToMatrixArray(), _matrix.ToMatrixArray()));
+        _matrix = Matrix.Mul(g, _matrix);
     }
 
     public void AddStretch(double d)
     {
-        var r = _matrix.ToMatrixArray();
+        var r = _matrix;
 
         var s = new Matrix(aa: d, ab: 0, ba: 0, bb: d, da: 0, db: 0);
 
-        var resultMatrix = MultiplyMatrices(_matrix.ToMatrixArray(), s.ToMatrixArray());
-
-        _matrix = new Matrix(resultMatrix);
+        _matrix = Matrix.Mul(_matrix, s);
     }
 
-    public static Point<TDestCoordSystem> operator* (Transform<TSrcCoordSystem, TDestCoordSystem> tr, Point<TSrcCoordSystem> p2)
+    public static Point<TDestCoordSystem> operator* (Transform<TSrcCoordSystem, TDestCoordSystem> tr, Point<TSrcCoordSystem> point)
     {
         Matrix m = tr._matrix;
 
-        MatrixArray vector = new MatrixArray(new[,] {{p2.X}, {p2.Y}, {1}});
+        Matrix pointMatrix = new Matrix(new[,] {{point.X}, {point.Y}, {1}});
 
-        var resultMatrux = MultiplyMatrices(m.ToMatrixArray(), vector);
+        Matrix resultMatrix = Matrix.Mul(m, pointMatrix);
 
-        return new Point<TDestCoordSystem>(resultMatrux.Matrix[0, 0], resultMatrux.Matrix[1, 0]);
+        return new Point<TDestCoordSystem>(resultMatrix.MatrixCoefficients[0, 0], resultMatrix.MatrixCoefficients[1, 0]);
     }
 
     public static Stroke<TDestCoordSystem> operator *(Transform<TSrcCoordSystem, TDestCoordSystem> tr, Stroke<TSrcCoordSystem> stroke)

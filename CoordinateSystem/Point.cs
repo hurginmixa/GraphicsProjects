@@ -1,4 +1,4 @@
-﻿using MixaSystem;
+﻿using CommonTools;
 
 namespace CoordinateSystem;
 
@@ -9,13 +9,13 @@ public readonly struct Point<TCoordinateSystem>(double x, double y) : IEquatable
 
     public static Shift<TCoordinateSystem> operator- (Point<TCoordinateSystem> p1, Point<TCoordinateSystem> p2) => new(p1.X - p2.X, p1.Y - p2.Y);
 
-    public static Point<TCoordinateSystem> Origin => new Point<TCoordinateSystem>(0, 0);
+    public static Point<TCoordinateSystem> Origin => new(0, 0);
 
     public override string ToString() => $"X:{X}, Y:{Y}";
 
     public bool Equals(Point<TCoordinateSystem> other)
     {
-        return X.IsEquals1(other.X, 1e-6) && Y.IsEquals1(other.Y, 1e-6) && IsInitialized == other.IsInitialized;
+        return X.IsEquals(other.X) && Y.IsEquals(other.Y) && IsInitialized == other.IsInitialized;
     }
 
     public override bool Equals(object? obj)

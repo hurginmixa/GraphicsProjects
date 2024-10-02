@@ -1,4 +1,4 @@
-﻿using MixaSystem;
+﻿using CommonTools;
 
 namespace CoordinateSystem;
 
@@ -13,7 +13,7 @@ public readonly struct Shift<TCoordinateSystem>(double dx, double dy) : IEquatab
 
     public bool Equals(Shift<TCoordinateSystem> other)
     {
-        return DX.IsEquals1(other.DX, 1e-6) && DY.IsEquals1(other.DY, 1e-6) && IsInitialized == other.IsInitialized;
+        return DX.IsEquals(other.DX) && DY.IsEquals(other.DY) && IsInitialized == other.IsInitialized;
     }
 
     public override bool Equals(object? obj)

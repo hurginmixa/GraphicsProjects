@@ -26,7 +26,7 @@ namespace SimpleApplication.Models
             }
         }
 
-        public void AddTick()
+        public void TickProcess()
         {
             Transform<GraphicSystem, GraphicSystem> tr = new Transform<GraphicSystem, GraphicSystem>();
             tr.AddShift(Point<GraphicSystem>.Origin - _center);
