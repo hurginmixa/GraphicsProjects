@@ -1,4 +1,4 @@
-﻿namespace CoordinateSystem;
+﻿namespace CoordinateSystem.Privitives;
 
 public class Matrix
 {

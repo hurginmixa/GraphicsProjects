@@ -1,4 +1,5 @@
-﻿using NUnit.Framework.Internal;
+﻿using CoordinateSystem.Privitives;
+using NUnit.Framework.Internal;
 using static System.Math;
 
 namespace CoordinateSystem.Tests;

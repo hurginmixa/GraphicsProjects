@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using System.Runtime.CompilerServices;
+using CoordinateSystem.Privitives;
 
 namespace CoordinateSystem;
 
@@ -55,12 +56,20 @@ public class Transform<TSrcCoordSystem, TDestCoordSystem>
         return new Point<TDestCoordSystem>(resultMatrix.MatrixCoefficients[0, 0], resultMatrix.MatrixCoefficients[1, 0]);
     }
 
-    public static Stroke<TDestCoordSystem> operator *(Transform<TSrcCoordSystem, TDestCoordSystem> tr, Stroke<TSrcCoordSystem> stroke)
+    public static Stroke<TDestCoordSystem> operator* (Transform<TSrcCoordSystem, TDestCoordSystem> tr, Stroke<TSrcCoordSystem> stroke)
     {
         Point<TDestCoordSystem> p1 = tr * stroke.Point1;
         Point<TDestCoordSystem> p2 = tr * stroke.Point2;
 
         return new Stroke<TDestCoordSystem>(p1, p2);
+    }
+
+    public static Rect<TDestCoordSystem> operator* (Transform<TSrcCoordSystem, TDestCoordSystem> tr, Rect<TSrcCoordSystem> rect)
+    {
+        Stroke<TDestCoordSystem> p1 = tr * rect.MainDiagonal;
+        Stroke<TDestCoordSystem> p2 = tr * rect.SubDiagonal;
+
+        return new Rect<TDestCoordSystem>(p1, p2);
     }
 
     public static Shift<TDestCoordSystem> operator* (Transform<TSrcCoordSystem, TDestCoordSystem> tr, Shift<TSrcCoordSystem> shift)

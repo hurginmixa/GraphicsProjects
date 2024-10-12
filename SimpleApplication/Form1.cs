@@ -5,6 +5,7 @@ using Timer = System.Windows.Forms.Timer;
 
 using static System.Math;
 using System.Drawing;
+using CoordinateSystem.Privitives;
 
 namespace SimpleApplication;
 
@@ -12,14 +13,14 @@ internal partial class Form1 : Form
 {
     private readonly DoubleBufferedPanel _drawingPanel;
     private readonly Timer _animationTimer;
-    private readonly IStrokesModel _strokesModel;
+    private readonly IShapesModel _shapesModel;
 
     private Point<DisplaySystem> _circle = new(50, 50);
     private Shift<DisplaySystem> _delta = new(2, 2);
 
-    public Form1(IStrokesModel strokesModel)
+    public Form1(IShapesModel shapesModel)
     {
-        _strokesModel = strokesModel;
+        _shapesModel = shapesModel;
 
         InitializeComponent();
         Text = "Drawing Example";
@@ -50,26 +51,26 @@ internal partial class Form1 : Form
         int l = 116;
         g.DrawEllipse(pen, (int) panelCenterX - l/2, (int) panelCenterY - l/2, l, l);
 
-        DrawStrokes(g, _strokesModel, _drawingPanel);
+        DrawStrokes(g, _shapesModel, _drawingPanel);
 
         // Рисуем круг
-        g.FillEllipse(Brushes.Red, (int) _circle.X, (int) _circle.Y, 50, 50);
+        g.FillEllipse(Brushes.Red, (int)_circle.X, (int)_circle.Y, 50, 50);
     }
 
-    private static void DrawStrokes(Graphics g, IStrokesModel strokesModel, DoubleBufferedPanel panel)
+    private static void DrawStrokes(Graphics g, IShapesModel shapesModel, DoubleBufferedPanel panel)
     {
-        Stroke<GraphicSystem>[] strokes = strokesModel.Strokes.ToArray();
-        if (!strokes.Any())
+        IShape<GraphicSystem>[] shapes = shapesModel.Shapes.ToArray();
+        if (!shapes.Any())
         {
             return;
         }
 
         Transform<GraphicSystem, DisplaySystem> tr = DisplayTransformPreparing();
 
-        double minX = strokes.Select(s => tr *s).Min(p => Math.Min(p.Point1.X, p.Point2.X));
-        double minY = strokes.Select(s => tr *s).Min(p => Math.Min(p.Point1.Y, p.Point2.Y));
-        double maxX = strokes.Select(s => tr *s).Max(p => Math.Max(p.Point1.X, p.Point2.X));
-        double maxY = strokes.Select(s => tr *s).Max(p => Math.Max(p.Point1.Y, p.Point2.Y));
+        double minX = shapes.Select(s => s.Transform(tr)).Min(p => p.MinPoint.X);
+        double minY = shapes.Select(s => s.Transform(tr)).Min(p => p.MinPoint.Y);
+        double maxX = shapes.Select(s => s.Transform(tr)).Max(p => p.MaxPoint.X);
+        double maxY = shapes.Select(s => s.Transform(tr)).Max(p => p.MaxPoint.Y);
         Point<GraphicSystem> strokesCenter = new Point<GraphicSystem>((minX + maxX) / 2, (minY + maxY) / 2);
 
         int panelCenterX = panel.Width / 2;
@@ -79,11 +80,37 @@ internal partial class Form1 : Form
 
         Pen pen = new Pen(Color.Blue, 2);
 
-        foreach (var stroke in strokes)
+        foreach (IShape<GraphicSystem> shape in shapes)
         {
-            Stroke<DisplaySystem> displayStroke = tr * stroke;
+            IShape<DisplaySystem> displayShape = shape.Transform(tr);
 
-            g.DrawLine(pen, (int)displayStroke.Point1.X, (int)displayStroke.Point1.Y, (int)displayStroke.Point2.X, (int)displayStroke.Point2.Y);
+            switch (displayShape)
+            {
+                case Stroke<DisplaySystem> displayStroke:
+                    int point1X = (int) displayStroke.Point1.X;
+                    int point1Y = (int) displayStroke.Point1.Y;
+                    int point2X = (int) displayStroke.Point2.X;
+                    int point2Y = (int) displayStroke.Point2.Y;
+
+                    g.DrawLine(pen, point1X, point1Y, point2X, point2Y);
+                    
+                    break;
+
+                case Rect<DisplaySystem> displayRect:
+                    var mainDiagonal = displayRect.MainDiagonal;
+                    var subDiagonal = displayRect.SubDiagonal;
+
+                    List<PointF> vv = new List<PointF>();
+                    vv.Add(new PointF() {X = (float) mainDiagonal.Point1.X, Y = (float) mainDiagonal.Point1.Y});
+                    vv.Add(new PointF() {X = (float) subDiagonal.Point1.X, Y = (float) subDiagonal.Point1.Y});
+                    vv.Add(new PointF() {X = (float) mainDiagonal.Point2.X, Y = (float) mainDiagonal.Point2.Y});
+                    vv.Add(new PointF() {X = (float) subDiagonal.Point2.X, Y = (float) subDiagonal.Point2.Y});
+                    vv.Add(new PointF() {X = (float) mainDiagonal.Point1.X, Y = (float) mainDiagonal.Point1.Y});
+
+                    g.DrawPolygon(pen, vv.ToArray());
+
+                    break;
+            }
         }
     }
 
@@ -91,7 +118,7 @@ internal partial class Form1 : Form
     {
         Transform<GraphicSystem, DisplaySystem> tr = new Transform<GraphicSystem, DisplaySystem>();
         tr.AddFlipY();
-        tr.AddRotate(PI/4);
+        //tr.AddRotate(PI/4);
         return tr;
     }
 
@@ -117,7 +144,7 @@ internal partial class Form1 : Form
             _delta = transform * _delta;
         }
 
-        _strokesModel.TickProcess();
+        _shapesModel.TickProcess();
 
         // Перерисовываем панель
         _drawingPanel.Invalidate(); // Это вызывает событие Paint для перерисовки панели

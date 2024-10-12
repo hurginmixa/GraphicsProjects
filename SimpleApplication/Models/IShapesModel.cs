@@ -2,9 +2,9 @@
 
 namespace SimpleApplication.Models;
 
-internal interface IStrokesModel
+internal interface IShapesModel
 {
     void TickProcess();
 
-    IEnumerable<Stroke<GraphicSystem>> Strokes { get; }
+    IEnumerable<IShape<GraphicSystem>> Shapes { get; }
 }

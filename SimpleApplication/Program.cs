@@ -16,9 +16,9 @@ internal static class Program
         // see https://aka.ms/applicationconfiguration.
         ApplicationConfiguration.Initialize();
         
-        IStrokesModel strokesModel = new AstrixStrokesModel();
-        strokesModel = new RectanglesModel();
+        IShapesModel shapesModel = new AstrixShapesModel();
+        shapesModel = new RectanglesModel();
         
-        Application.Run(new Form1(strokesModel));
+        Application.Run(new Form1(shapesModel));
     }
 }

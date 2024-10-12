@@ -1,3 +1,4 @@
+using CoordinateSystem.Privitives;
 using NUnit.Framework.Internal;
 
 namespace CoordinateSystem.Tests;

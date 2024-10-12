@@ -1,13 +1,14 @@
 ﻿using CommonTools;
 
-namespace CoordinateSystem;
+namespace CoordinateSystem.Privitives;
 
 public readonly struct Point<TCoordinateSystem>(double x, double y) : IEquatable<Point<TCoordinateSystem>> where TCoordinateSystem : CoordinateSystem
 {
-    public readonly double X = x, Y = y;
+    public readonly double X = x;
+    public readonly double Y = y;
     public readonly bool IsInitialized = true;
 
-    public static Shift<TCoordinateSystem> operator- (Point<TCoordinateSystem> p1, Point<TCoordinateSystem> p2) => new(p1.X - p2.X, p1.Y - p2.Y);
+    public static Shift<TCoordinateSystem> operator -(Point<TCoordinateSystem> p1, Point<TCoordinateSystem> p2) => new(p1.X - p2.X, p1.Y - p2.Y);
 
     public static Point<TCoordinateSystem> Origin => new(0, 0);
 

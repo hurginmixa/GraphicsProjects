@@ -1,4 +1,5 @@
 ﻿using CoordinateSystem;
+using CoordinateSystem.Privitives;
 using static System.Math;
 
 namespace SimpleApplication.Models.AstrixModels

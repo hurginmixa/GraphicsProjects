@@ -1,4 +1,6 @@
-﻿namespace CoordinateSystem.Tests;
+﻿using CoordinateSystem.Privitives;
+
+namespace CoordinateSystem.Tests;
 
 [TestFixture]
 internal class CoordinateSystemTest

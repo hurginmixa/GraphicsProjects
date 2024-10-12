@@ -1,8 +1,9 @@
 ﻿using CoordinateSystem;
+using CoordinateSystem.Privitives;
 
 namespace SimpleApplication.Models.AstrixModels
 {
-    internal class AstrixStrokesModel : IStrokesModel
+    internal class AstrixShapesModel : IShapesModel
     {
         private readonly AstrixPointsModel _pointsModel = new(new Point<GraphicSystem>(100, 150), 280, 3);
         private readonly Shift<GraphicSystem> _panelSize = new(200, 300);
@@ -12,7 +13,7 @@ namespace SimpleApplication.Models.AstrixModels
             _pointsModel.TickProcess();
         }
 
-        public IEnumerable<Stroke<GraphicSystem>> Strokes
+        public IEnumerable<IShape<GraphicSystem>> Shapes
         {
             get
             {

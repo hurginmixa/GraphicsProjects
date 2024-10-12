@@ -1,6 +1,8 @@
-﻿namespace CoordinateSystem;
+﻿using CoordinateSystem.Privitives;
 
-public readonly struct Stroke<TCoordinateSystem> where TCoordinateSystem : CoordinateSystem
+namespace CoordinateSystem;
+
+public readonly struct Stroke<TCoordinateSystem> : IShape<TCoordinateSystem> where TCoordinateSystem : CoordinateSystem
 {
     private readonly Point<TCoordinateSystem> _point1;
     private readonly Point<TCoordinateSystem> _point2;
@@ -22,6 +24,15 @@ public readonly struct Stroke<TCoordinateSystem> where TCoordinateSystem : Coord
     public Point<TCoordinateSystem> Point2 => _point2;
 
     public Shift<TCoordinateSystem> Size => _point2 - _point1;
+
+    Point<TCoordinateSystem> IShape<TCoordinateSystem>.MinPoint => new(Math.Min(_point1.X, _point2.X), Math.Min(_point1.Y, _point2.Y));
+
+    Point<TCoordinateSystem> IShape<TCoordinateSystem>.MaxPoint => new(Math.Max(_point1.X, _point2.X), Math.Max(_point1.Y, _point2.Y));
+
+    public IEnumerable<Stroke<TCoordinateSystem>> GetStrokes() => new[] {this};
+
+    public IShape<TTargetSystem> Transform<TTargetSystem>(Transform<TCoordinateSystem, TTargetSystem> transform)
+        where TTargetSystem : CoordinateSystem => transform * this;
 
     public double Length
     {
