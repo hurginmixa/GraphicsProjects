@@ -1,11 +1,8 @@
-﻿using System.Security.Cryptography.Xml;
-using CoordinateSystem;
+﻿using CoordinateSystem;
 using SimpleApplication.Models;
-using Timer = System.Windows.Forms.Timer;
-
-using static System.Math;
-using System.Drawing;
 using CoordinateSystem.Privitives;
+
+using Timer = System.Windows.Forms.Timer;
 
 namespace SimpleApplication;
 
@@ -15,12 +12,12 @@ internal partial class Form1 : Form
     private readonly Timer _animationTimer;
     private readonly IShapesModel _shapesModel;
 
-    private Point<DisplaySystem> _circle = new(50, 50);
-    private Shift<DisplaySystem> _delta = new(2, 2);
+    private readonly CircleModel _circleModel;
 
     public Form1(IShapesModel shapesModel)
     {
         _shapesModel = shapesModel;
+        _circleModel = new CircleModel();
 
         InitializeComponent();
         Text = "Drawing Example";
@@ -30,7 +27,7 @@ internal partial class Form1 : Form
         _drawingPanel.Dock = DockStyle.Fill;
         _drawingPanel.BackColor = Color.White;
         _drawingPanel.Paint += DrawingPanel_Paint;
-
+        _drawingPanel.SizeChanged += _drawingPanel_SizeChanged;
         Controls.Add(_drawingPanel);
 
         _animationTimer = new Timer();
@@ -39,7 +36,9 @@ internal partial class Form1 : Form
         _animationTimer.Start();
     }
 
-    private void DrawingPanel_Paint(object sender, PaintEventArgs e)
+    private void _drawingPanel_SizeChanged(object? sender, EventArgs e) => _circleModel.SetDrawPanelSize(width: _drawingPanel.Width, height: _drawingPanel.Height);
+
+    private void DrawingPanel_Paint(object? sender, PaintEventArgs e)
     {
         Graphics g = e.Graphics;
 
@@ -54,7 +53,7 @@ internal partial class Form1 : Form
         DrawStrokes(g, _shapesModel, _drawingPanel);
 
         // Рисуем круг
-        g.FillEllipse(Brushes.Red, (int)_circle.X, (int)_circle.Y, 50, 50);
+        g.FillEllipse(Brushes.Red, (int)_circleModel.CirclePosition.X, (int)_circleModel.CirclePosition.Y, 50, 50);
     }
 
     private static void DrawStrokes(Graphics g, IShapesModel shapesModel, DoubleBufferedPanel panel)
@@ -93,19 +92,21 @@ internal partial class Form1 : Form
                     int point2Y = (int) displayStroke.Point2.Y;
 
                     g.DrawLine(pen, point1X, point1Y, point2X, point2Y);
-                    
+
                     break;
 
                 case Rect<DisplaySystem> displayRect:
                     var mainDiagonal = displayRect.MainDiagonal;
                     var subDiagonal = displayRect.SubDiagonal;
 
-                    List<PointF> vv = new List<PointF>();
-                    vv.Add(new PointF() {X = (float) mainDiagonal.Point1.X, Y = (float) mainDiagonal.Point1.Y});
-                    vv.Add(new PointF() {X = (float) subDiagonal.Point1.X, Y = (float) subDiagonal.Point1.Y});
-                    vv.Add(new PointF() {X = (float) mainDiagonal.Point2.X, Y = (float) mainDiagonal.Point2.Y});
-                    vv.Add(new PointF() {X = (float) subDiagonal.Point2.X, Y = (float) subDiagonal.Point2.Y});
-                    vv.Add(new PointF() {X = (float) mainDiagonal.Point1.X, Y = (float) mainDiagonal.Point1.Y});
+                    List<PointF> vv =
+                    [
+                        new PointF() {X = (float) mainDiagonal.Point1.X, Y = (float) mainDiagonal.Point1.Y},
+                        new PointF() {X = (float) subDiagonal.Point1.X, Y = (float) subDiagonal.Point1.Y},
+                        new PointF() {X = (float) mainDiagonal.Point2.X, Y = (float) mainDiagonal.Point2.Y},
+                        new PointF() {X = (float) subDiagonal.Point2.X, Y = (float) subDiagonal.Point2.Y},
+                        new PointF() {X = (float) mainDiagonal.Point1.X, Y = (float) mainDiagonal.Point1.Y},
+                    ];
 
                     g.DrawPolygon(pen, vv.ToArray());
 
@@ -122,27 +123,9 @@ internal partial class Form1 : Form
         return tr;
     }
 
-    private void AnimationTimer_Tick(object sender, EventArgs e)
+    private void AnimationTimer_Tick(object? sender, EventArgs e)
     {
-        // Изменяем координаты круга
-        _circle += _delta;
-
-        // Проверяем границы панели
-        if (_circle.X < 0 || _circle.X + 50 > _drawingPanel.Width)
-        {
-            Transform<DisplaySystem, DisplaySystem> transform = new Transform<DisplaySystem, DisplaySystem>();
-            transform.AddFlipX();
-
-            _delta = transform * _delta;
-        }
-
-        if (_circle.Y < 0 || _circle.Y + 50 > _drawingPanel.Height)
-        {
-            Transform<DisplaySystem, DisplaySystem> transform = new Transform<DisplaySystem, DisplaySystem>();
-            transform.AddFlipY();
-
-            _delta = transform * _delta;
-        }
+        _circleModel.TickProcess();
 
         _shapesModel.TickProcess();
 

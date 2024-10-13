@@ -1,6 +1,7 @@
 ﻿using CoordinateSystem;
 using CoordinateSystem.Privitives;
 using System.Collections.Generic;
+using CommonTools;
 
 namespace SimpleApplication.Models;
 
@@ -8,9 +9,9 @@ internal class RectanglesModel : IShapesModel
 {
     private readonly List<Rect<GraphicSystem>> _rects;
     private readonly Transform<GraphicSystem, GraphicSystem> _transform;
-    private int _count;
+    private TimeDivider _timeDivider;
+    private int _currentStepNumer;
     private const int _maxStepCount = 2; //100;
-    private int _timeDivider = 0;
 
     public RectanglesModel()
     {
@@ -18,27 +19,28 @@ internal class RectanglesModel : IShapesModel
         _transform.AddRotate(Math.PI * 2.0 / _maxStepCount);
 
         _rects = [];
+
+        _timeDivider = new TimeDivider(3);
     }
 
     public void TickProcess()
     {
-        if (++_timeDivider % 3 != 0)
-        {
-            return;
-        }
-        _timeDivider = 0;
-
-        if (_count == 2)
+        if (!_timeDivider.TickProcess())
         {
             return;
         }
 
-        _count++;
+        if (_currentStepNumer == 2)
+        {
+            return;
+        }
 
-        if (_count == _maxStepCount + 1)
+        _currentStepNumer++;
+
+        if (_currentStepNumer == _maxStepCount + 1)
         {
             _rects.Clear();
-            _count = 0;
+            _currentStepNumer = 0;
 
             return;
         }
